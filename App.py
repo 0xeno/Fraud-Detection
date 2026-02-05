@@ -40,12 +40,15 @@ class FraudApp:
             threshold = st.slider("Sensitivity Threshold", min_value=0.0, max_value=1.0, value=0.5, step=0.01)
             
             # Display visual information
-            if threshold < 0.3:
-                st.warning("⚠️ Low Sensitivity: A lot of fraud may slip through.")
-            elif threshold > 0.8:
-                st.warning("⚠️ High Sensitivity: Beware of many false alarms.")
+            if page_selection != "Dashboard":
+                st.subheader("Model Settings")
+                threshold = st.slider("Sensitivity Threshold", 0.0, 1.0, 0.5, 0.01)
+                
+                # Visual feedback
+                if threshold < 0.3: st.warning("⚠️ Low Sensitivity")
+                elif threshold > 0.8: st.warning("⚠️ High Sensitivity")
             else:
-                st.info(f"Active Threshold: **{threshold}**")
+                st.info("Mode: Monitoring View")
             
             # WE RETURN TWO VALUES: Page & Threshold
             return page_selection, threshold
@@ -62,4 +65,5 @@ class FraudApp:
 
 if __name__ == "__main__":
     app = FraudApp()
+
     app.run()
