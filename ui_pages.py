@@ -13,7 +13,7 @@ class DashboardPage:
         
         df_dummy = self.service.get_dummy_data()
         total_trans = len(df_dummy)
-        total_fraud = len(df_dummy[df_dummy['Type'] == 'Fraud'])
+        total_fraud = len(df_dummy[df_dummy['Prediction'] == 'Fraud'])
         
         col1, col2, col3 = st.columns(3)
         col1.metric("Total Transactions", f"{total_trans:,}", "+120 today")
@@ -240,4 +240,5 @@ class BatchPredictionPage:
             st.dataframe(display_df.style.apply(self.service.highlight_fraud, axis=1))
             
             csv = display_df.to_csv(index=False).encode('utf-8')
+
             st.download_button("Download Analysis Results", csv, "fraud_report.csv", "text/csv")
