@@ -37,9 +37,10 @@ class DashboardPage:
             if not fraud_only.empty:
                 fraud_by_cat = fraud_only['category'].value_counts().reset_index()
                 fraud_by_cat.columns = ['Category', 'Count']
-                
+                fraud_by_cat['Category'] = fraud_by_cat['Category'].str.replace('_', ' ').str.title()
                 fig_bar = px.bar(fraud_by_cat, x='Count', y='Category', orientation='h',
                                 title="Top Fraud Categories")
+                fig_bar.update_layout(yaxis={'categoryorder':'total ascending'})
                 st.plotly_chart(fig_bar, use_container_width=True)
             else:
                 st.info("No fraud data generated in dummy.")
@@ -76,6 +77,7 @@ class SinglePredictionPage:
                     category_options,
                     index=None,  # IMPORTANT: So that the default is empty
                     placeholder="Select category..." # Gray text inside
+                    format_func=lambda x: x.replace('_', ' ').title()
                 )
             
             with col3:
@@ -242,3 +244,4 @@ class BatchPredictionPage:
             csv = display_df.to_csv(index=False).encode('utf-8')
 
             st.download_button("Download Analysis Results", csv, "fraud_report.csv", "text/csv")
+
