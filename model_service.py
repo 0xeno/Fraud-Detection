@@ -8,11 +8,25 @@ class ModelService:
     """
     def __init__(self):
         # Load your original model (make sure the .pkl file is in the same folder)
+        self.model_path = 'fraud_detection_XGBoost_Original.pkl' 
+        self.model = None
+        self.expected_features = []
         try:
-            self.model = joblib.load('fraud_detection_XGBoost_Original.pkl') 
-            print("Model loaded successfully!")
+            loaded_package = joblib.load(self.model_path) 
+            if isinstance(loaded_package, dict):
+                # KASUS ANDA: Ini adalah Dictionary (Paket)
+                print("📦 Loading model from dictionary package...")
+                self.model = loaded_package['model']  # Take the model
+                self.expected_features = loaded_package['features'] # Take the column name
+            else:
+                # If it turns out that the file contains the model directly
+                print("⚠️ Loading raw model...")
+                self.model = loaded_package
+                
+            print(f"✅ Model loaded! Expecting {len(self.expected_features)} features.")
+            
         except Exception as e:
-            print(f"Error loading model: {e}")
+            print(f"❌ Error loading model: {e}")
             self.model = None
 
         self.model_name = "Fraud Detection Model Real"
@@ -243,4 +257,5 @@ class ModelService:
             css = 'background-color: #ffcccc; color: #8b0000; font-weight: bold'
             return [css] * len(row)
         else:
+
             return [''] * len(row)
