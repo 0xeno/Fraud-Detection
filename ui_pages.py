@@ -76,7 +76,7 @@ class SinglePredictionPage:
                     "Category", 
                     category_options,
                     index=None,  # IMPORTANT: So that the default is empty
-                    placeholder="Select category..." # Gray text inside
+                    placeholder="Select category..." # Gray text inside,
                     format_func=lambda x: x.replace('_', ' ').title()
                 )
             
@@ -244,4 +244,5 @@ class BatchPredictionPage:
             csv = display_df.to_csv(index=False).encode('utf-8')
 
             st.download_button("Download Analysis Results", csv, "fraud_report.csv", "text/csv")
+
 
