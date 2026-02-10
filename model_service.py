@@ -14,7 +14,6 @@ class ModelService:
         try:
             loaded_package = joblib.load(self.model_path) 
             if isinstance(loaded_package, dict):
-                # KASUS ANDA: Ini adalah Dictionary (Paket)
                 print("📦 Loading model from dictionary package...")
                 self.model = loaded_package['model']  # Take the model
                 self.expected_features = loaded_package['features'] # Take the column name
@@ -259,3 +258,4 @@ class ModelService:
         else:
 
             return [''] * len(row)
+
