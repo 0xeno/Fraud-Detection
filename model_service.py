@@ -114,6 +114,16 @@ class ModelService:
         # Convert to bool if your model is trained using bool data type.
         # But usually int (0/1) is safer. Change .astype(bool) if bool is required.
         df_final = pd.DataFrame([data])
+
+        # Clean column names (remove spaces, <, >, -) to match XGBoost
+        clean_columns = []
+        for col in df_final.columns:
+            new_col = col.replace(" ", "") \
+                         .replace("<", "") \
+                         .replace(">", "") \
+                         .replace("-", "")
+            clean_columns.append(new_col)
+        df_final.columns = clean_columns
         
         # Ensure the data type is bool for the one-hot column (according to your df.info information).
         bool_cols = [c for c in df_final.columns if 'category' in c or 'month' in c or 'day' in c]
@@ -258,4 +268,5 @@ class ModelService:
         else:
 
             return [''] * len(row)
+
 
