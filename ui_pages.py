@@ -178,7 +178,7 @@ class BatchPredictionPage:
             | `age` | Number | `35` |
             | `city_pop` | Number | `20000` |
             | `distance_KM` | Number | `5.2` |
-            | `state_encoded`| Number | `1` |
+            | `state`| Number | `1` |
             | `trans_date` | Date (YYYY-MM-DD) | `2024-01-31` |
             | `trans_time` | Time (HH:MM:SS) | `14:30:00` |
             """)
@@ -244,6 +244,7 @@ class BatchPredictionPage:
             csv = display_df.to_csv(index=False).encode('utf-8')
 
             st.download_button("Download Analysis Results", csv, "fraud_report.csv", "text/csv")
+
 
 
 
