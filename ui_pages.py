@@ -219,10 +219,12 @@ class BatchPredictionPage:
                     if st.button("Predict All Data"):
                         with st.spinner('Analyzing transactions...'):
                             result_df = self.service.process_batch_prediction(df, threshold=threshold)
-                            self._display_results(result_df)
+                            st.session_state['batch_result_df'] = result_df
                             
             except Exception as e:
                 st.error(f"Error reading file: {e}")
+        if 'batch_result_df' in st.session_state:
+            self._display_results(st.session_state['batch_result_df'])
 
     def _display_results(self, df):
         st.success("✅ Analysis Complete!")
@@ -236,14 +238,19 @@ class BatchPredictionPage:
             st.metric("Total Fraud Found", f"{fraud} / {total} Transactions")
             
         with tab2:
-            show_fraud = st.checkbox("Show only Fraud", value=True)
+            show_fraud = st.checkbox("Show only Fraud", value=False)
             display_df = df[df['Prediction'] == 'Fraud'] if show_fraud else df
-            
             st.dataframe(display_df.style.apply(self.service.highlight_fraud, axis=1))
-            
             csv = display_df.to_csv(index=False).encode('utf-8')
+            download_name = "fraud_report_ONLY.csv" if show_fraud else "fraud_report_ALL.csv"
+            st.download_button(
+                label=f"Download Analysis Results ({len(display_df)} rows)", 
+                data=csv, 
+                file_name=download_name, 
+                mime="text/csv"
+            )
+            
 
-            st.download_button("Download Analysis Results", csv, "fraud_report.csv", "text/csv")
 
 
 
